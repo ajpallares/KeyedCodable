@@ -16,7 +16,7 @@ public func <-> <T>(left: inout T, right: Mapping) throws where T: Codable {
     }
 }
 
-public func <-> <T>(left: inout T!, right: Mapping) throws where T: Codable {
+public func <-> <T>(left: inout T?, right: Mapping) throws where T: Codable {
     if right.map.type.isDecoding {
         try left <<- right
     } else {
@@ -32,7 +32,7 @@ public func <-> <T>(left: inout [T], right: Mapping) throws where T: Codable {
     }
 }
 
-public func <-> <T>(left: inout [T]!, right: Mapping) throws where T: Codable {
+public func <-> <T>(left: inout [T]?, right: Mapping) throws where T: Codable {
     if right.map.type.isDecoding {
         try left <<- right
     } else {
@@ -46,7 +46,7 @@ public func <<- <T>(left: inout T, right: Mapping) throws where T: Decodable {
     try right.map.decode(object: &left, with: right.key, options: right.options)
 }
 
-public func <<- <T>(left: inout T!, right: Mapping) throws where T: Decodable {
+public func <<- <T>(left: inout T?, right: Mapping) throws where T: Decodable {
     try right.map.decode(object: &left, with: right.key, options: right.options)
 }
 
@@ -54,7 +54,7 @@ public func <<- <T>(left: inout [T], right: Mapping) throws where T: Decodable {
     try right.map.decode(object: &left, with: right.key, options: right.options)
 }
 
-public func <<- <T>(left: inout [T]!, right: Mapping) throws where T: Decodable {
+public func <<- <T>(left: inout [T]?, right: Mapping) throws where T: Decodable {
     try right.map.decode(object: &left, with: right.key, options: right.options)
 }
 
@@ -64,7 +64,7 @@ public func ->> <T>(left: T, right: Mapping) throws where T: Encodable {
     try right.map.encode(object: left, with: right.key, options: right.options)
 }
 
-public func ->> <T>(left: T!, right: Mapping) throws where T: Encodable {
+public func ->> <T>(left: T?, right: Mapping) throws where T: Encodable {
     try right.map.encode(object: left!, with: right.key, options: right.options)
 }
 
@@ -72,6 +72,6 @@ public func ->> <T>(left: [T], right: Mapping) throws where T: Encodable {
     try right.map.encode(object: left, with: right.key, options: right.options)
 }
 
-public func ->> <T>(left: [T]!, right: Mapping) throws where T: Encodable {
+public func ->> <T>(left: [T]?, right: Mapping) throws where T: Encodable {
     try right.map.encode(object: left!, with: right.key, options: right.options)
 }

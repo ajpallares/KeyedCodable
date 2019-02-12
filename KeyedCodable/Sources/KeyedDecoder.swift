@@ -45,30 +45,20 @@ private final class DecoderKeyMap: KeyMapBase {
 
     func decode<V>(object: inout V, with keyCode: CodingKey, options: KeyOptions) throws where V: Decodable {
         if let flat = options.flat, flat == keyCode.stringValue {
-            if object is _Optional {
-                try? object = V(from: decoder)
-            } else {
-                try object = V(from: decoder)
-            }
-        } else {
-            let result = try keyedDecodingContainer(for: keyCode, options: options)
-            if object is _Optional {
-                if let val = try result.container.decodeIfPresent(V.self, forKey: result.key) {
-                    object = val
-                }
-            } else {
-                let val = try result.container.decode(V.self, forKey: result.key)
-                object = val
-            }
-        }
-    }
-
-    func decode<V>(object: inout V!, with keyCode: CodingKey, options: KeyOptions) throws where V: Decodable {
-        if let flat = options.flat, flat == keyCode.stringValue {
             try object = V(from: decoder)
         } else {
             let result = try keyedDecodingContainer(for: keyCode, options: options)
             let val = try result.container.decode(V.self, forKey: result.key)
+            object = val
+        }
+    }
+
+    func decode<V>(object: inout V?, with keyCode: CodingKey, options: KeyOptions) throws where V: Decodable {
+        if let flat = options.flat, flat == keyCode.stringValue {
+            try object = V(from: decoder)
+        } else {
+            let result = try keyedDecodingContainer(for: keyCode, options: options)
+            let val = try result.container.decodeIfPresent(V.self, forKey: result.key)
             object = val
         }
     }
@@ -91,18 +81,12 @@ private final class DecoderKeyMap: KeyMapBase {
             }
             object = newObject
         } else {
-            if object is _Optional {
-                if let val = try result.container.decodeIfPresent([V].self, forKey: result.key) {
-                    object = val
-                }
-            } else {
-                let val = try result.container.decode([V].self, forKey: result.key)
-                object = val
-            }
+            let val = try result.container.decode([V].self, forKey: result.key)
+            object = val
         }
     }
 
-    func decode<V>(object: inout [V]!, with keyCode: CodingKey, options: KeyOptions) throws where V: Decodable {
+    func decode<V>(object: inout [V]?, with keyCode: CodingKey, options: KeyOptions) throws where V: Decodable {
         let result = try keyedDecodingContainer(for: keyCode, options: options)
         if  let optionalArrayElements = options.optionalArrayElements,
             !optionalArrayElements.isEmpty,
@@ -120,7 +104,7 @@ private final class DecoderKeyMap: KeyMapBase {
             }
             object = newObject
         } else {
-            let val = try result.container.decode([V].self, forKey: result.key)
+            let val = try result.container.decodeIfPresent([V].self, forKey: result.key)
             object = val
         }
     }
