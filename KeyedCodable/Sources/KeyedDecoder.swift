@@ -55,7 +55,7 @@ private final class DecoderKeyMap: KeyMapBase {
 
     func decode<V>(object: inout V?, with keyCode: CodingKey, options: KeyOptions) throws where V: Decodable {
         if let flat = options.flat, flat == keyCode.stringValue {
-            try object = V(from: decoder)
+            try? object = V(from: decoder)
         } else {
             let result = try keyedDecodingContainer(for: keyCode, options: options)
             let val = try result.container.decodeIfPresent(V.self, forKey: result.key)
